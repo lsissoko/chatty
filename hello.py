@@ -1,23 +1,30 @@
 import tornado.ioloop
 import tornado.web
+import tornado.websocket
 
 
 class MainHandler(tornado.web.RequestHandler):
 
     def get(self):
-        # self.write("Hello, world")
         self.render("index.html")
 
 
-# class ChatHandler():
+class ChatHandler(tornado.websocket.WebSocketHandler):
 
-#     def foo(self):
-#         pass
+    def open(self):
+        pass
+
+    def on_message(self, message):
+        self.write_message(u"Your message was: " + message)
+
+    def on_close(self):
+        pass
 
 
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
+        (r"/websocket", ChatHandler)
     ])
 
 
