@@ -11,8 +11,6 @@ An anonymous chat client/server built on the Tornado library using a combination
 2. `source ./bin/activate`
 3. `python hello.py` (or `python hello.py --debug` if you want to turn on [autoreload](http://www.tornadoweb.org/en/stable/autoreload.html))
 4. http://localhost:8085/
+    - open new tab(s)/window(s) to create new user(s)
+    - messages will be sent to all users
 5. `deactivate` (when done using the app)
-
-### usage
-1. open new tab(s)/window(s) to create new user(s)
-2. type in the input field (messages will be sent to all users)
