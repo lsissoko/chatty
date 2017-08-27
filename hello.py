@@ -4,40 +4,59 @@ import tornado.websocket
 import tornado.autoreload
 import os
 
+global_connections = set()
+global_messages = []
+
 
 class MainHandler(tornado.web.RequestHandler):
 
+    # TODO render global_messages as HTML
     def get(self):
-        self.render("index.html")
+        print(global_messages)
+        self.render("index.html", messages=global_messages)
 
 
 class ChatHandler(tornado.websocket.WebSocketHandler):
 
     def open(self):
-        pass
+        print("new connection opened")
+        global_connections.add(self)
 
     def on_message(self, message):
-        self.write_message(message)
+        print("new message: {}".format(message))
+
+        for conn in global_connections:
+            conn.write_message(message)
+
+        global_messages.append(message)
 
     def on_close(self):
-        pass
+        print("connection closing")
 
 
-def make_app():
+def make_app(debug):
     return tornado.web.Application([
         (r"/", MainHandler),
         (r"/websocket", ChatHandler)
-    ], debug=True)
+    ], debug=debug)
 
 
 if __name__ == "__main__":
-    app = make_app()
+    from optparse import OptionParser
+
+    parser = OptionParser()
+    parser.add_option("--debug", action="store_true", default=False)
+    parser_options, args = parser.parse_args()
+
+    app = make_app(parser_options.debug)
     app.listen(8085)
 
-    # TODO remove in prod
-    tornado.autoreload.start()
-    for dir, _, files in os.walk("static"):
-        [tornado.autoreload.watch(dir + "/" + f)
-         for f in files if not f.startswith(".")]
+    print("\n-----\nnew app \n")
+
+    if (parser_options.debug):
+        tornado.autoreload.start()
+        for dir, _, files in os.walk("static"):
+            [tornado.autoreload.watch(dir + "/" + f)
+             for f in files if not f.startswith(".")]
 
     tornado.ioloop.IOLoop.current().start()
