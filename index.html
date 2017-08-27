@@ -13,19 +13,29 @@
       #messages li:nth-child(odd) { background: #eee; }
     </style>
   </head>
-  <body>
+  <body onload="onLoad();">
     <ul id="messages"></ul>
     <div id="input-div">
-      <input id="msg-field" autocomplete="off" /><button id="enter-btn">Send</button>
+      <input id="msg-field" autocomplete="off" />
+      <button id="enter-btn" onclick="sendMsg();" value="Send">Send</button>
     </div>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
-      $('#enter-btn').click(function() {
-        var msg = $('#msg-field').val();
-        console.log(msg);
+      var ws;
 
-        $('#msg-field').val('');
-      });
+      function onLoad() {
+        // TODO - don't hardcode the port
+        ws = new WebSocket('ws://localhost:8085/websocket');
+
+        ws.onmessage = function(e) {
+          console.log(e.data);
+        }
+      }
+
+      function sendMsg() {
+        var msg = document.getElementById('msg-field').value;
+        ws.send(msg);
+      }
     </script>
   </body>
 </html>
