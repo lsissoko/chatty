@@ -4,23 +4,34 @@ import tornado.websocket
 import tornado.autoreload
 import os
 
+global_connections = set()
+global_messages = []
+
 
 class MainHandler(tornado.web.RequestHandler):
 
+    # TODO render global_messages as HTML
     def get(self):
-        self.render("index.html")
+        print(global_messages)
+        self.render("index.html", messages=global_messages)
 
 
 class ChatHandler(tornado.websocket.WebSocketHandler):
 
     def open(self):
-        pass
+        print("new connection opened")
+        global_connections.add(self)
 
     def on_message(self, message):
-        self.write_message(message)
+        print("new message: {}".format(message))
+
+        for conn in global_connections:
+            conn.write_message(message)
+
+        global_messages.append(message)
 
     def on_close(self):
-        pass
+        print("connection closing")
 
 
 def make_app():
@@ -33,6 +44,8 @@ def make_app():
 if __name__ == "__main__":
     app = make_app()
     app.listen(8085)
+
+    print("\n-----\nnew app \n")
 
     # TODO remove in prod
     tornado.autoreload.start()

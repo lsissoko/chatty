@@ -14,7 +14,11 @@
     </style>
   </head>
   <body onload="onLoad();">
-    <ul id="messages"></ul>
+    <ul id="messages">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% end %}
+    </ul>
     <div id="input-div">
       <input id="msg-field" autocomplete="off" />
       <button id="enter-btn" onclick="sendMsg();" value="Send">Send</button>
@@ -24,27 +28,22 @@
       var username = 'User ' + (+new Date());
 
       function onLoad() {
-        // console.log('hello world! -- ' + (+new Date()));
-        // var li = document.createElement('li');
-        // li.appendChild(document.createTextNode('hello: ' + (+new Date)));
-        // document.getElementById('messages').appendChild(li);
-
-        // TODO maybe something else?
-        var newUsername = prompt('Enter a username');
-        username = newUsername ? newUsername : username;
+        // // TODO maybe something else?
+        // var newUsername = prompt('Enter a username');
+        // username = newUsername ? newUsername : username;
 
         // TODO don't hardcode port
         ws = new WebSocket('ws://localhost:8085/websocket');
 
         // TODO print message on page
         ws.onmessage = e => {
-          console.log(e.data);
           showMsg(e.data);
         }
       }
 
       function sendMsg() {
         var msgField = document.getElementById('msg-field');
+        // TODO find a way to send the username and the message separately
         ws.send('<strong>' + username + ':</strong> ' + msgField.value);
         msgField.value = '';
       }
