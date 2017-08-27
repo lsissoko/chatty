@@ -24,18 +24,26 @@
       var ws;
 
       function onLoad() {
-        // TODO - don't hardcode the port
+        // TODO: Don't hardcode port
         ws = new WebSocket('ws://localhost:8085/websocket');
 
-        ws.onmessage = function(e) {
+        // TODO: Print message on page
+        ws.onmessage = e => {
           console.log(e.data);
         }
       }
 
       function sendMsg() {
-        var msg = document.getElementById('msg-field').value;
-        ws.send(msg);
+        var msgField = document.getElementById('msg-field');
+        ws.send(msgField.value);
+        msgField.value = '';
       }
+
+      document.getElementById('msg-field').addEventListener("keyup", event => {
+        if (event.key !== 'Enter') return;
+        sendMsg();
+        event.preventDefault();
+      });
     </script>
   </body>
 </html>
