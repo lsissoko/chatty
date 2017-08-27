@@ -16,7 +16,7 @@
   <body onload="onLoad();">
     <ul id="messages">
       {% for message in messages %}
-        <li>{{ message }}</li>
+        <li>{% raw message %}</li>
       {% end %}
     </ul>
     <div id="input-div">
