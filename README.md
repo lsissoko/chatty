@@ -9,6 +9,6 @@ An anonymous chat client/server built on the Tornado library using a combination
 ### usage
 1. `cd chatty`
 2. `source ./bin/activate`
-3. `python hello.py`
+3. `python hello.py` (or `python hello.py --debug` if you want to turn on [autoreload](http://www.tornadoweb.org/en/stable/autoreload.html))
 4. http://localhost:8085/
 5. `deactivate` (when done using the app)

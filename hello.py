@@ -34,23 +34,29 @@ class ChatHandler(tornado.websocket.WebSocketHandler):
         print("connection closing")
 
 
-def make_app():
+def make_app(debug):
     return tornado.web.Application([
         (r"/", MainHandler),
         (r"/websocket", ChatHandler)
-    ], debug=True)
+    ], debug=debug)
 
 
 if __name__ == "__main__":
-    app = make_app()
+    from optparse import OptionParser
+
+    parser = OptionParser()
+    parser.add_option("--debug", action="store_true", default=False)
+    parser_options, args = parser.parse_args()
+
+    app = make_app(parser_options.debug)
     app.listen(8085)
 
     print("\n-----\nnew app \n")
 
-    # TODO remove in prod
-    tornado.autoreload.start()
-    for dir, _, files in os.walk("static"):
-        [tornado.autoreload.watch(dir + "/" + f)
-         for f in files if not f.startswith(".")]
+    if (parser_options.debug):
+        tornado.autoreload.start()
+        for dir, _, files in os.walk("static"):
+            [tornado.autoreload.watch(dir + "/" + f)
+             for f in files if not f.startswith(".")]
 
     tornado.ioloop.IOLoop.current().start()
