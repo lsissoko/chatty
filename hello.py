@@ -17,7 +17,7 @@ class ChatHandler(tornado.websocket.WebSocketHandler):
         pass
 
     def on_message(self, message):
-        self.write_message(u"Your message was: " + message)
+        self.write_message(message)
 
     def on_close(self):
         pass

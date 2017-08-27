@@ -21,12 +21,17 @@
     </div>
     <script>
       var ws;
+      var username = 'User ' + (+new Date());
 
       function onLoad() {
         // console.log('hello world! -- ' + (+new Date()));
         // var li = document.createElement('li');
         // li.appendChild(document.createTextNode('hello: ' + (+new Date)));
         // document.getElementById('messages').appendChild(li);
+
+        // TODO maybe something else?
+        var newUsername = prompt('Enter a username');
+        username = newUsername ? newUsername : username;
 
         // TODO don't hardcode port
         ws = new WebSocket('ws://localhost:8085/websocket');
@@ -40,7 +45,7 @@
 
       function sendMsg() {
         var msgField = document.getElementById('msg-field');
-        ws.send(msgField.value);
+        ws.send('<strong>' + username + ':</strong> ' + msgField.value);
         msgField.value = '';
       }
 
