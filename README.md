@@ -6,9 +6,13 @@ An anonymous chat client/server built on the Tornado library using a combination
 1. clone project
 2. `virtualenv -p python3 chatty`
 
-### usage
+### run
 1. `cd chatty`
 2. `source ./bin/activate`
 3. `python hello.py` (or `python hello.py --debug` if you want to turn on [autoreload](http://www.tornadoweb.org/en/stable/autoreload.html))
 4. http://localhost:8085/
 5. `deactivate` (when done using the app)
+
+### usage
+1. open new tab(s)/window(s) to create new user(s)
+2. type in the input field (messages will be sent to all users)
