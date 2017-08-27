@@ -23,12 +23,18 @@
       var ws;
 
       function onLoad() {
-        // TODO: Don't hardcode port
+        // console.log('hello world! -- ' + (+new Date()));
+        // var li = document.createElement('li');
+        // li.appendChild(document.createTextNode('hello: ' + (+new Date)));
+        // document.getElementById('messages').appendChild(li);
+
+        // TODO don't hardcode port
         ws = new WebSocket('ws://localhost:8085/websocket');
 
-        // TODO: Print message on page
+        // TODO print message on page
         ws.onmessage = e => {
           console.log(e.data);
+          showMsg(e.data);
         }
       }
 
@@ -36,6 +42,12 @@
         var msgField = document.getElementById('msg-field');
         ws.send(msgField.value);
         msgField.value = '';
+      }
+
+      function showMsg(msg) {
+        var li = document.createElement('li');
+        li.innerHTML = msg;
+        document.getElementById('messages').appendChild(li);
       }
 
       document.getElementById('msg-field').addEventListener('keyup', event => {
