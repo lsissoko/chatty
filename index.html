@@ -23,17 +23,14 @@
     </div>
     <script>
       var ws;
+
+      // TODO let user pick a username
       var username = 'User ' + (+new Date());
 
       function onLoad() {
-        // // TODO maybe something else?
-        // var newUsername = prompt('Enter a username');
-        // username = newUsername ? newUsername : username;
-
         // TODO don't hardcode port
         ws = new WebSocket('ws://localhost:8085/websocket');
 
-        // TODO print message on page
         ws.onmessage = e => {
           showMsg(e.data);
         }
