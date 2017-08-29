@@ -1,8 +1,11 @@
+import os
+from optparse import OptionParser
+
+import tornado.autoreload
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
-import tornado.autoreload
-import os
+from tornado.websocket import WebSocketClosedError
 
 global_connections = set()
 global_messages = []
@@ -25,10 +28,21 @@ class ChatHandler(tornado.websocket.WebSocketHandler):
     def on_message(self, message):
         print("new message: {}".format(message))
 
-        for conn in global_connections:
-            conn.write_message(message)
-
-        global_messages.append(message)
+        # TODO fix this
+        #
+        # Reproduce error:
+        # - refresh your tab then send a message
+        # - this breaks everyone's connection
+        #
+        # Clues:
+        # - refreshing creates a new user
+        try:
+            global_messages.append(message)
+            for conn in global_connections:
+                conn.write_message(message)
+        except WebSocketClosedError:
+            print("\nwebsocket closed when sending message\n\n")
+            self.write_message("<strong style='color: red'>ERROR</strong>")
 
     def on_close(self):
         print("connection closing")
@@ -42,8 +56,6 @@ def make_app(debug):
 
 
 if __name__ == "__main__":
-    from optparse import OptionParser
-
     parser = OptionParser()
     parser.add_option("--debug", action="store_true", default=False)
     parser_options, args = parser.parse_args()

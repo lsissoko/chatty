@@ -30,9 +30,10 @@ $ source bin/activate
 $ python hello.py
 $ python hello.py --debug
 ```
+
 3. http://localhost:8085/
-    - open new tab(s)/window(s) to create new user(s)
-    - messages will be sent to all users
+    - new tabs/windows will create new users
+    - NOTE: page refreshes will break every user's connection
 
 4. deactivate the virtual environment when you're done
 ```
