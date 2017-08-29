@@ -28,8 +28,14 @@ class ChatHandler(tornado.websocket.WebSocketHandler):
     def on_message(self, message):
         print("new message: {}".format(message))
 
-        # TODO fix this (the error closes everyone's connection)
-        # - to replicate: refresh your tab then send a message
+        # TODO fix this
+        #
+        # Reproduce error:
+        # - refresh your tab then send a message
+        # - this breaks everyone's connection
+        #
+        # Clues:
+        # - refreshing creates a new user
         try:
             global_messages.append(message)
             for conn in global_connections:
